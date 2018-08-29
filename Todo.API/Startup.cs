@@ -35,6 +35,7 @@ namespace Todo.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

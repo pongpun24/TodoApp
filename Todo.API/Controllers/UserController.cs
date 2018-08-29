@@ -13,11 +13,13 @@ namespace Todo.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userRepository){
+        private readonly IUnitOfWork _uintOfWork;
+        public UserController(IUserRepository userRepository, IUnitOfWork uintOfWork){
             _userRepository = userRepository;
+            _uintOfWork = uintOfWork;
         }
 
-         [HttpGet]
+        [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
             return _userRepository.GetAll().ToList();
@@ -30,19 +32,17 @@ namespace Todo.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<bool> Post([FromBody]User user)
+        public void Post([FromBody]User user)
         {
             _userRepository.Add(user);
-
-            return true;
+            _uintOfWork.Commit();
         }
 
         [HttpPut]
-        public ActionResult<bool> Put([FromBody]User user){
-
+        public void Put([FromBody]User user)
+        {
             _userRepository.Update(user);
-
-            return true;
+            _uintOfWork.Commit();
         }
     }
 }

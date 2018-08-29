@@ -8,7 +8,6 @@ namespace Todo.API.Data.Repositories
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(TodoContext context) : base(context)
-
         {
 
         }

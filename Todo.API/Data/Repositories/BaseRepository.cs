@@ -8,7 +8,7 @@ namespace Todo.API.Data.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        public TodoContext _context { get; }
+        private readonly TodoContext _context;
         private readonly DbSet<T> _dbSet;
 
         public BaseRepository(TodoContext context)
@@ -16,10 +16,10 @@ namespace Todo.API.Data.Repositories
             _context = context;
             _dbSet = _context.Set<T>();
         }
+
         public void Add(T entity)
         {
            _dbSet.Add(entity);
-           _context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -31,25 +31,12 @@ namespace Todo.API.Data.Repositories
 
         public IEnumerable<T> GetMany(Expression<Func<T, bool>> condition, Expression<Func<T, object>>[] properties)
         {
-            /*var obj = _context.Set<T>().Where(condition).AsQueryable();
-            foreach(var prop in properties)
-            {
-                obj.Include(prop);
-            }
-
-            return obj.AsEnumerable();*/
-
-            var obj = _context.Set<T>();
-
-            return obj.ToList();
-
+            return _context.Set<T>().ToList();
         }
 
         public void Update(T entity)
         {
-            _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
         }
 
         public T GetById(int id)
@@ -57,8 +44,9 @@ namespace Todo.API.Data.Repositories
             return _context.Set<T>().Find(id);
         }
 
-        public IEnumerable<T> GetAll(){
-            return _context.Set<T>().AsEnumerable();
+        public IEnumerable<T> GetAll()
+        {
+            return _context.Set<T>().ToList();
         }
     }
 }
