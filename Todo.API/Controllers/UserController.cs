@@ -35,7 +35,7 @@ namespace Todo.API.Controllers
         public void Post([FromBody]User user)
         {
             _userRepository.Add(user);
-            _uintOfWork.Commit();
+            _uintOfWork.RejectChange();
         }
 
         [HttpPut]
