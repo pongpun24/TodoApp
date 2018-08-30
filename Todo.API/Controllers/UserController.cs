@@ -35,13 +35,19 @@ namespace Todo.API.Controllers
         public void Post([FromBody]User user)
         {
             _userRepository.Add(user);
-            _uintOfWork.RejectChange();
+            _uintOfWork.Commit();
         }
 
         [HttpPut]
         public void Put([FromBody]User user)
         {
             _userRepository.Update(user);
+            _uintOfWork.Commit();
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id){
+            _userRepository.Delete(id);
             _uintOfWork.Commit();
         }
     }
